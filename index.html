@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Virtual - Recursos </title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --school-blue: #2c3e50;
+            --btn-no: #1a252f; /* Gris muy oscuro, casi negro, para que destaque */
+            --bg: #f4f7f6;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%; max-width: 480px;
+            background: white; padding: 35px;
+            border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center; position: relative;
+        }
+
+        .step { display: none; animation: fadeIn 0.8s ease; }
+        .step.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .school-banner { background: var(--school-blue); color: white; padding: 15px; border-radius: 12px; margin-bottom: 25px; font-weight: 600; }
+        .subject-btn {
+            display: block; width: 100%; padding: 16px; margin: 12px 0;
+            border: 2px solid #eaeeef; border-radius: 12px; background: white;
+            cursor: pointer; font-size: 1rem; transition: all 0.3s; color: #34495e;
+            text-align: left; padding-left: 20px;
+        }
+
+        .story-img { width: 100%; height: 280px; object-fit: cover; border-radius: 18px; margin-bottom: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .img-circular { width: 200px; height: 200px; border-radius: 50%; margin: 0 auto 25px; border: 5px solid var(--primary); }
+
+        .message-text { font-size: 1.05rem; line-height: 1.7; color: #444; margin-bottom: 25px; text-align: left; }
+        
+        .next-btn {
+            background: var(--primary); color: white; border: none;
+            padding: 14px 35px; border-radius: 50px; cursor: pointer;
+            font-weight: 600; font-size: 1.1rem;
+        }
+
+        .btn-group { display: flex; justify-content: center; gap: 20px; margin-top: 20px; height: 60px; position: relative; }
+        
+        #si { background: var(--primary); color: white; border: none; padding: 14px 35px; border-radius: 50px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        #si:hover { transform: scale(1.1); background: #ef476f; }
+
+        #no { 
+            background: var(--btn-no); 
+            color: white; 
+            border: none; 
+            padding: 14px 35px; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            font-weight: 600;
+            transition: 0.1s;
+        }
+        #no.moving { position: fixed; z-index: 1000; box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
+
+        #aviso-intentos { 
+            display: none; color: #e74c3c; font-weight: bold; margin-top: 15px; font-size: 0.95rem; line-height: 1.4;
+        }
+
+        .full-screen {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; z-index: 9999; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center; padding: 25px; box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="main-content">
+        
+        <div id="step1" class="step active">
+            <div class="school-banner">🎓 Plataforma de Estudios</div>
+            <button class="subject-btn" onclick="nextStep(2)">📖 Matemáticas - Álgebra</button>
+            <button class="subject-btn" onclick="nextStep(2)">📝 Lengua - Análisis de Textos</button>
+            <button class="subject-btn" onclick="nextStep(2)">📜 Historia - Apuntes Completos</button>
+        </div>
+
+        <div id="step2" class="step">
+            <h2 style="color: #e74c3c;">⚠️ Sistema Interrumpido</h2>
+            <p>Se ha detectado una carpeta oculta con prioridad alta.</p>
+            <p>Nombre del archivo: <b>"Nuestra_Historia.zip"</b></p>
+            <button class="next-btn" onclick="nextStep(3)">Abrir archivo</button>
+        </div>
+
+        <div id="step3" class="step">
+            <img src="https://i.ibb.co/39QMCQyz/image.png" class="story-img">
+            <div class="message-text">
+                Todo empezó hace mucho tiempo... ¿te acuerdas de esta foto? En aquel entonces estábamos en nuestra graduación de primaria, qué recuerdos aquellos, cuando no teníamos preocupaciones ¿no jaja?
+            </div>
+            <button class="next-btn" onclick="nextStep(4)">Siguiente recuerdo</button>
+        </div>
+
+        <div id="step4" class="step">
+            <img src="https://i.ibb.co/5X0r5n74/image.png" class="story-img">
+            <div class="message-text">
+                Crecimos juntos, desde 4 de infantil, ya llevamos 10 años conociéndonos, compartimos risas en el patio y momentos que se quedaron grabados y siempre los recordaremos. Siempre supe que eras especial, aunque en ese momento no sabía cómo explicárselo al mundo, explicarle que eras una persona única, que nunca antes el mundo había visto.
+            </div>
+            <button class="next-btn" onclick="nextStep(5)">Y ahora llegamos aquí...</button>
+        </div>
+
+        <div id="step5" class="step">
+            <img src="https://cdn.discordapp.com/attachments/1486233500720824340/1492483755426709715/IMG_4245.png?ex=69db7f50&is=69da2dd0&hm=fbd7288ea3a2edffb3ce910ac5b9ed7284bd552cd2f201d9bd69cec1a1d81a3e&" class="story-img img-circular">
+            <div class="message-text">
+                <b>Y ahora estamos aquí, Zoe.</b><br><br>
+                Tengo que admitirte que desde hace mucho tiempo te miro de forma distinta. Soy un pesado muchas veces y un tonto seguramente también, pero logro hacerte gracia a veces por lo menos... pero siempre pensando en qué pasará con nosotros. Me muero por hablarte y saber de ti... porque <span style="color:var(--primary); font-weight:bold;">estoy enamorado de ti</span>.
+            </div>
+            <p style="font-weight: bold; color: var(--primary);">¿Quieres ser mi novia? ❤️</p>
+            <div class="btn-group">
+                <button id="si" onclick="celebrar()">¡SÍ!</button>
+                <button id="no" onmouseover="intentarNo()" onclick="intentarNo()">No</button>
+            </div>
+            <div id="aviso-intentos"></div>
+        </div>
+    </div>
+
+    <div id="screen-si" class="full-screen">
+        <h1 style="font-family: 'Dancing Script', cursive; font-size: 4rem; color: var(--primary);">¡SÍ! ❤️</h1>
+        <p style="font-size: 1.3rem;">Gracias por escoger esta opción... <br>No te imaginas lo feliz que me haces.</p>
+        <div style="background: #fff0f3; padding: 20px 40px; border-radius: 50px; font-weight: bold; border: 2px dashed var(--primary); margin-top: 20px;">
+            Dame mañana una nota para decírmelo 😉
+        </div>
+        <p style="margin-top: 30px; font-size: 0.9rem; color: #888;">Porfa, que esto no salga de aquí.</p>
+    </div>
+
+    <div id="screen-no" class="full-screen">
+        <h2 style="color: #2c3e50;">Entiendo... 😊</h2>
+        <p style="font-size: 1.1rem; line-height: 1.6; max-width: 320px;">Entiendo que no quieras, pero te pido que nuestra amistad siga siendo lo que es, porque eres muy importante para mí.</p>
+        <p style="margin-top: 20px; font-weight: bold; color: var(--primary);">Gracias por ser sincera. ❤️</p>
+        <p style="margin-top: 30px; font-size: 0.8rem; color: #999;">(Que esto quede entre nosotros)</p>
+    </div>
+
+    <script>
+        let noCount = 0;
+        const totalIntentos = 10;
+        const frasesNo = ["¿Segura?", "¿Lo has pensado?", "Nop", "¡Oye!", "Piénsalo...", "¿De verdad?"];
+
+        function nextStep(n) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step' + n).classList.add('active');
+        }
+
+        function intentarNo() {
+            const btnNo = document.getElementById('no');
+            const aviso = document.getElementById('aviso-intentos');
+            noCount++;
+
+            // Activar movimiento
+            btnNo.classList.add('moving');
+            
+            // Lógica de movimiento seguro (dentro de pantalla)
+            const padding = 40;
+            const maxX = window.innerWidth - btnNo.offsetWidth - padding;
+            const maxY = window.innerHeight - btnNo.offsetHeight - padding;
+            
+            btnNo.style.left = Math.max(padding, Math.random() * maxX) + 'px';
+            btnNo.style.top = Math.max(padding, Math.random() * maxY) + 'px';
+            
+            // Cambiar texto del botón
+            btnNo.innerText = frasesNo[noCount % frasesNo.length];
+
+            // Mostrar aviso de confirmación
+            aviso.style.display = 'block';
+            let restantes = totalIntentos - noCount;
+            
+            if (restantes > 0) {
+                aviso.innerHTML = "Dale " + restantes + " veces más para confirmarlo,<br>pero piénsalo bien...";
+            } else {
+                irAmistad();
+            }
+        }
+
+        function celebrar() {
+            document.getElementById('screen-si').style.display = 'flex';
+            var end = Date.now() + (5 * 1000);
+            (function frame() {
+                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff4d6d', '#ff85a1'] });
+                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff4d6d', '#ff85a1'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+
+        function irAmistad() {
+            document.getElementById('screen-no').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
